@@ -21,6 +21,6 @@ setup(
         'Topic :: Security :: Cryptography'
     ],
     packages=['mhef'],
-    install_requires=['pycrypto']
+    install_requires=['pycryptodome']
 )
 
