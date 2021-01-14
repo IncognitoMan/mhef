@@ -27,8 +27,9 @@ parser.add_argument('inputfile', help='DATA.BIN input file')
 parser.add_argument('outputfile', help='output file')
 args = parser.parse_args()
 
-game = mhef.psp.MHP3_JP
-if args.game == '2G_JP':
+if args.game == '3':
+    game = mhef.psp.MHP3_JP
+elif args.game == '2G_JP':
     game = mhef.psp.MHP2G_JP
 elif args.game == '2G_NA':
     game = mhef.psp.MHP2G_NA

@@ -120,7 +120,7 @@ class DataCipher:
         # Select which files are unencrypted
         if game == MHP2G_JP:
             self._exceptions = self._mhp2g_jp_exceptions
-        if game == MHP2G_NA or game == MHP2G_EU:
+        elif game == MHP2G_NA or game == MHP2G_EU:
             self._exceptions = self._mhp2g_na_exceptions
         elif game == MHP3_JP:
             self._exceptions = self._mhp3_jp_exceptions
