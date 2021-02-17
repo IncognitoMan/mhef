@@ -160,7 +160,7 @@ class DataCipher:
         for i in range(len(buff)):
             buff[i] ^= self._next_key()
         # Apply a substitution cipher to the data using the encode table
-        return buff.tostring().translate(self._encode_table)
+        return buff.tobytes().translate(self._encode_table)
 
     def decrypt(self, buff, lba):
         """
@@ -178,7 +178,7 @@ class DataCipher:
         # Apply an XOR cipher to the data using a new key every 4 bytes
         for i in range(len(buff)):
             buff[i] ^= self._next_key()
-        return buff.tostring()
+        return buff.tobytes()
 
     def encrypt_file(self, data_file, out_file):
         """
@@ -328,7 +328,7 @@ class SavedataCipher(DataCipher):
         seed = random.getrandbits(16)
         # Apply a substitution cipher to the data and encrypt it
         buff = DataCipher.encrypt(self, buff.translate(self._encode_table), seed)
-        seed = array.array('I', [seed]).tostring()
+        seed = array.array('I', [seed]).tobytes()
         # Apply a substitution cipher to the XOR cipher seed and append it to the data
         return buff + seed.translate(self._encode_table).translate(self._encode_table)
 
@@ -491,7 +491,7 @@ class PSPSavedataCipher:
         xor_buff = bytearray()
         for i in range(1, len(buff) // 16 + 1):
             xor_buff.extend(xor_key[:12])
-            xor_buff.extend(array.array('I', [i]).tostring())
+            xor_buff.extend(array.array('I', [i]).tobytes())
         aes = AES.new(self._cipher4, AES.MODE_CBC, b'\x00' * 16)
         xor_buff = bytearray(aes.decrypt(bytes(xor_buff)))
         buff = bytearray(buff)
@@ -523,7 +523,7 @@ class PSPSavedataCipher:
         xor_buff = bytearray()
         for i in range(1, len(buff) // 16):
             xor_buff.extend(xor_key)
-            xor_buff.extend(array.array('I', [i]).tostring())
+            xor_buff.extend(array.array('I', [i]).tobytes())
         aes = AES.new(self._cipher4, AES.MODE_CBC, b'\x00' * 16)
         xor_buff = bytearray(aes.decrypt(bytes(xor_buff)))
         buff = bytearray(buff[16:])
@@ -639,7 +639,7 @@ class QuestCipher:
         buff -- Data read from a decrypted quest file
 
         """
-        size = array.array('I', [len(buff)]).tostring()
+        size = array.array('I', [len(buff)]).tobytes()
         # Hash the unencrypted data with the salt
         md = hashlib.sha1(buff + self._hash_salt).digest()
         # Add the size and hash to the start of the data
@@ -655,7 +655,7 @@ class QuestCipher:
         # Add the XOR cipher seeds to the start of the data
         for i in range(4):
             buff.insert(0, seed[i])
-        return buff.tostring()
+        return buff.tobytes()
 
     def decrypt(self, buff):
         """
@@ -672,7 +672,7 @@ class QuestCipher:
         # Apply an XOR cipher to the data using a new key every 2 bytes
         for i in range(len(buff)):
             buff[i] ^= self._next_key(i%4)
-        buff = buff.tostring()
+        buff = buff.tobytes()
         # Get the size from the start of the data
         size = array.array('I', buff[:4])[0]
         # Get the hash from the start of the data
